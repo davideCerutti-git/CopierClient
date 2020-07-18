@@ -16,3 +16,31 @@
 [DEBUG] 2020-07-18 18:42:41,467 responding...
 [DEBUG] 2020-07-18 18:42:41,473 waiting commands...
 [DEBUG] 2020-07-18 18:43:01,870 Lost connection to: /192.168.2.4
+[DEBUG] 2020-07-18 19:16:03,656 MainClientThred: started
+[DEBUG] 2020-07-18 19:16:03,663 Client Socket: Socket[addr=/192.168.2.4,port=1050,localport=52470]
+[DEBUG] 2020-07-18 19:16:03,664 waiting commands...
+[DEBUG] 2020-07-18 19:16:03,783 File configured, will try loading
+[DEBUG] 2020-07-18 19:16:03,783 File found on file system
+[DEBUG] 2020-07-18 19:16:04,145 Intializing shared thread pool executor with max threads of 10
+[ INFO] 2020-07-18 19:16:04,171 FTP server started
+[ INFO] 2020-07-18 19:16:04,197 Global keyboard hook successfully started, press [escape] key to shutdown. Connected keyboards:
+[ INFO] 2020-07-18 19:16:04,197 65596: \\?\ACPI#HPQ8002#4&31cfdb4d&0#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:16:04,197 65598: \\?\HID#VID_1C4F&PID_0002&MI_00#7&5821856&0&0000#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:16:04,200 Global mouse hook successfully started, press [middle] mouse button to shutdown. Connected mice:
+[ INFO] 2020-07-18 19:16:04,200 65590: \\?\HID#ALP0017&Col01#5&dd66a3f&1&0000#{378de44c-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:16:04,200 65592: \\?\HID#VID_046D&PID_C05A#6&e99b18b&1&0000#{378de44c-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:16:04,200 65594: \\?\ACPI#SYN3072#4&31cfdb4d&0#{378de44c-56ef-11d1-bc8c-00a0c91405dd}
+[DEBUG] 2020-07-18 19:16:21,443 recived: get name
+[DEBUG] 2020-07-18 19:16:21,443 responding...
+[DEBUG] 2020-07-18 19:17:08,379 MainClientThred: started
+[DEBUG] 2020-07-18 19:17:08,442 File configured, will try loading
+[DEBUG] 2020-07-18 19:17:08,442 File found on file system
+[DEBUG] 2020-07-18 19:17:08,746 Intializing shared thread pool executor with max threads of 10
+[ INFO] 2020-07-18 19:17:08,765 FTP server started
+[ INFO] 2020-07-18 19:17:08,786 Global keyboard hook successfully started, press [escape] key to shutdown. Connected keyboards:
+[ INFO] 2020-07-18 19:17:08,787 65596: \\?\ACPI#HPQ8002#4&31cfdb4d&0#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:17:08,787 65598: \\?\HID#VID_1C4F&PID_0002&MI_00#7&5821856&0&0000#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:17:08,789 Global mouse hook successfully started, press [middle] mouse button to shutdown. Connected mice:
+[ INFO] 2020-07-18 19:17:08,789 65590: \\?\HID#ALP0017&Col01#5&dd66a3f&1&0000#{378de44c-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:17:08,789 65592: \\?\HID#VID_046D&PID_C05A#6&e99b18b&1&0000#{378de44c-56ef-11d1-bc8c-00a0c91405dd}
+[ INFO] 2020-07-18 19:17:08,789 65594: \\?\ACPI#SYN3072#4&31cfdb4d&0#{378de44c-56ef-11d1-bc8c-00a0c91405dd}

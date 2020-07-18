@@ -123,9 +123,7 @@ public class ClientThread extends Thread {
 		}
 	}
 
-	/**
-	 * 
-	 */
+
 	private void createOutputStream() {
 		try {
 			osw = new OutputStreamWriter(socketReceiver.getOutputStream());
