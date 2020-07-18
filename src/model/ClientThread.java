@@ -10,13 +10,20 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.BlockingQueue;
+
 import org.apache.log4j.Logger;
+
+import commands.Command;
 
 public class ClientThread extends Thread {
 
-	private Socket socket = null;
-	private BufferedReader in = null;
-	private PrintWriter out = null;
+	private Socket socketReceiver = null;
+	private Socket socketSender = null;
+	private BufferedReader inReceiver = null;
+	private PrintWriter outReceiver = null;
+	private BufferedReader inSender = null;
+	private PrintWriter outSender = null;
 	private InetAddress serverAddress;
 	private int port;
 	private boolean connectedToServer = false;
@@ -27,12 +34,16 @@ public class ClientThread extends Thread {
 	private Logger log;
 	private boolean stopThread;
 	private String clientName;
+	private ModelClient m;
+	private BlockingQueue<String> commandsQueue;
+	private String strLine;
 
-	public ClientThread(InetAddress _serverAddress, int _port, Logger _log, String _clientName) {
+	public ClientThread(InetAddress _serverAddress, int _port, Logger _log, String _clientName, ModelClient _m) {
 		serverAddress = _serverAddress;
 		port = _port;
 		log = _log;
 		clientName=_clientName;
+		m=_m;
 	}
 
 	@Override
@@ -40,17 +51,18 @@ public class ClientThread extends Thread {
 		log.debug("MainClientThred: started");
 		while (!stopThread) {
 			while (!connectedToServer && !stopThread) {
-				socket = null;
-				out = null;
-				in = null;
+				socketReceiver = null;
+				outReceiver = null;
+				inReceiver = null;
 				osw = null;
 				bw = null;
 				isr = null;
 				try {
-					socket = new Socket(serverAddress, port);
+					socketReceiver = new Socket(serverAddress, port);
+					socketSender = new Socket(serverAddress, port);
 					connectedToServer = true;
 				} catch (IOException e) {
-					log.debug("Connect failed, waiting and trying again...");
+					//log.debug("Connect failed, waiting and trying again...");
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException ie) {
@@ -59,16 +71,38 @@ public class ClientThread extends Thread {
 				}
 			}
 			
-			log.debug("Client Socket: " + socket);
-			// creation input stream from socket
-			createInputStream();
-			// creation output stream from socket
-			createOutputStream();
-			out.write(clientName);
-			log.debug("sending name "+clientName+" to server..");
+			log.debug("Client Socket: " + socketReceiver);
+			// creation input/output streams from socket
+			try {
+				inReceiver = new BufferedReader(new InputStreamReader(socketReceiver.getInputStream()));
+				outReceiver = new PrintWriter(new OutputStreamWriter(socketReceiver.getOutputStream()), true);
+				inSender = new BufferedReader(new InputStreamReader(socketSender.getInputStream()));
+				outSender = new PrintWriter(new OutputStreamWriter(socketSender.getOutputStream()), true);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			try {
 				while (true) {
-					checkForServerCommands();
+					//Receiver
+					log.debug("waiting commands...");
+					strLine=inReceiver.readLine();
+					log.debug("recived: "+strLine);
+					Command c=m.getCommandRegister().getCommandByName(strLine);
+					log.debug("responding...");
+					outReceiver.write(c.execute()+"\n");
+					outReceiver.flush();
+					
+					//Sender
+					strLine=commandsQueue.poll();
+					if (strLine != null) {
+						outSender.write(strLine+"\n");
+						outSender.flush();
+						log.debug("printed: " + strLine);
+						strLine = null;
+						log.debug("Response: "+inSender.readLine());
+					}
+					
+					
 				}
 			} catch (UnknownHostException e) {
 				System.err.println("Don’t know about host " + serverAddress);
@@ -80,10 +114,10 @@ public class ClientThread extends Thread {
 		}
 
 		log.debug("EchoClient: closing...");
-		out.close();
+		outReceiver.close();
 		try {
-			in.close();
-			socket.close();
+			inReceiver.close();
+			socketReceiver.close();
 		} catch (IOException e) {
 			log.error(e);
 		}
@@ -94,12 +128,12 @@ public class ClientThread extends Thread {
 	 */
 	private void createOutputStream() {
 		try {
-			osw = new OutputStreamWriter(socket.getOutputStream());
+			osw = new OutputStreamWriter(socketReceiver.getOutputStream());
 		} catch (IOException e1) {
 			log.error(e1);
 		}
 		bw = new BufferedWriter(osw);
-		out = new PrintWriter(bw, true);
+		outReceiver = new PrintWriter(bw, true);
 	}
 
 	/**
@@ -107,20 +141,26 @@ public class ClientThread extends Thread {
 	 */
 	private void createInputStream() {
 		try {
-			isr = new InputStreamReader(socket.getInputStream());
+			isr = new InputStreamReader(socketReceiver.getInputStream());
 		} catch (IOException e1) {
 			log.error(e1);
 		}
-		in = new BufferedReader(isr);
+		inReceiver = new BufferedReader(isr);
 	}
 
 	/**
 	 * @throws IOException
 	 */
 	private void checkForServerCommands() throws IOException {
-		if (in.readLine().trim().startsWith(Message.CopyFiles)) {
+		if (inReceiver.readLine().trim().startsWith(Message.CopyFiles)) {
 			log.debug(" Command \"CopyFile\" recived");
-		}else if(in.readLine().trim().startsWith(Message.Alive)) {	
+		}else if(inReceiver.readLine().trim().startsWith(Message.Alive)) {	
 		} 
 	}
+
+	public BlockingQueue<String> getCommandsQueue() {
+		return commandsQueue;
+	}
+	
+	
 }

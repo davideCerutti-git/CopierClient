@@ -15,11 +15,13 @@ public class UserInteractionListener extends Thread {
 	private static boolean run1 = true;
 	public static boolean standby = false;
 	private static double lastDate = (new Date()).getTime();
-	private static final double presetDate = 5;
+	private static final double presetDate = 600;
 	Logger log;
+	private ClientThread client;
 
-	public UserInteractionListener(Logger _log) {
+	public UserInteractionListener(Logger _log, ClientThread clientThread) {
 		log = _log;
+		client=clientThread;
 	}
 
 	@Override
@@ -40,8 +42,10 @@ public class UserInteractionListener extends Thread {
 		keyboardHook.addKeyListener(new GlobalKeyAdapter() {
 			@Override
 			public void keyPressed(GlobalKeyEvent event) {
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 				if (event.getVirtualKeyCode() == GlobalKeyEvent.VK_ESCAPE) {
@@ -50,8 +54,10 @@ public class UserInteractionListener extends Thread {
 			}
 			@Override
 			public void keyReleased(GlobalKeyEvent event) {
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 			}
@@ -64,29 +70,37 @@ public class UserInteractionListener extends Thread {
 						&& (event.getButtons() & GlobalMouseEvent.BUTTON_RIGHT) != GlobalMouseEvent.BUTTON_NO) {
 					log.info("Both mouse buttons are currently pressed!");
 				}
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 			}
 			@Override
 			public void mouseReleased(GlobalMouseEvent event) {
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 			}
 			@Override
 			public void mouseMoved(GlobalMouseEvent event) {
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 			}
 			@Override
 			public void mouseWheel(GlobalMouseEvent event) {
-				if (standby)
+				if (standby) {
 					log.info("Not in standby...");
+					client.getCommandsQueue().add("not in standby");
+				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 			}
@@ -98,6 +112,7 @@ public class UserInteractionListener extends Thread {
 				if ((new Date()).getTime() - lastDate > (presetDate * 1000)) {
 					if (!standby) {
 						log.info("in standby...");
+						client.getCommandsQueue().add("in standby");
 						standby = true;
 					}
 				}

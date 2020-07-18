@@ -1,11 +1,12 @@
 package model;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import org.apache.log4j.Logger;
-
+import commands.Command;
+import commands.CommandRegister;
+import commands.GetComputerNameCommand;
 import settings.Settings;
 
 public class ModelClient {
@@ -18,14 +19,17 @@ public class ModelClient {
 	private LocalFtpServer ftpServer;
 	private UserInteractionListener uil;
 	private String clientName;
+	CommandRegister commandRegister ;
 
 	public ModelClient()  {
 		readSettings();
-		clientThread = new ClientThread(serverAddress, serverPort, log, clientName);
+		clientThread = new ClientThread(serverAddress, serverPort, log, clientName, this);
+		commandRegister= new CommandRegister();
+		commandRegister.register("get name", new GetComputerNameCommand());
 		clientThread.start();
 		ftpServer=new LocalFtpServer(log);
 		ftpServer.startServer();
-		uil=new UserInteractionListener(log);
+		uil=new UserInteractionListener(log,clientThread);
 		uil.start();
 	}
 
@@ -47,4 +51,10 @@ public class ModelClient {
 		serverPort = Integer.parseInt(settings.getProperty("copierServerPort"));
 		clientName = settings.getProperty("clientName").trim();
 	}
+
+	public CommandRegister getCommandRegister() {
+		return commandRegister;
+	}
+	
+	
 }
