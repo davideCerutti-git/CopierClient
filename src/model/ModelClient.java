@@ -13,7 +13,11 @@ public class ModelClient {
 
 	private InetAddress serverAddress;
 	private int serverPort;
-	private ClientThread clientThread;
+	private ClientThreadFrom clientThread;
+	public ClientThreadFrom getClientThread() {
+		return clientThread;
+	}
+
 	private Settings settings;
 	public static final Logger log = Logger.getLogger(ModelClient.class.getName());
 	private LocalFtpServer ftpServer;
@@ -23,19 +27,17 @@ public class ModelClient {
 
 	public ModelClient()  {
 		readSettings();
-		clientThread = new ClientThread(serverAddress, serverPort, log, clientName, this);
+		clientThread = new ClientThreadFrom(serverAddress, serverPort, log, clientName, this);
 		commandRegister= new CommandRegister();
 		commandRegister.register("get name", new GetComputerNameCommand());
 		clientThread.start();
 		ftpServer=new LocalFtpServer(log);
 		ftpServer.startServer();
-		uil=new UserInteractionListener(log,clientThread);
+		uil=new UserInteractionListener(log,this);
 		uil.start();
 	}
 
-	/**
-	 * 
-	 */
+
 	private void readSettings() {
 		settings = new Settings();
 		try {
@@ -56,5 +58,8 @@ public class ModelClient {
 		return commandRegister;
 	}
 	
+	public ClientThreadFrom getClient() {
+		return clientThread;
+	}
 	
 }
