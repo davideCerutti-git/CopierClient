@@ -1,4 +1,4 @@
-package model;
+package SlaveNode;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,8 +16,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 
 import commands.Command;
+import model.ModelClient;
 
-public class ClientThreadTo extends Thread {
+public class SlaveServerNode extends Thread {
 
 	private Socket socket = null;
 	private BufferedReader in = null;
@@ -39,7 +40,7 @@ public class ClientThreadTo extends Thread {
 	private String outLine;
 	private boolean runningServerThread = true;
 
-	public ClientThreadTo(InetAddress _serverAddress, int _port, Logger _log, String _clientName, ModelClient _m) {
+	public SlaveServerNode(InetAddress _serverAddress, int _port, Logger _log, String _clientName, ModelClient _m) {
 		
 		serverAddress = _serverAddress;
 		port = _port;

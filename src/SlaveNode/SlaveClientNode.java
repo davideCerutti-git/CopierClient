@@ -1,4 +1,4 @@
-package model;
+package SlaveNode;
 
 
 import java.io.BufferedReader;
@@ -16,8 +16,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 
 import commands.Command;
+import model.ModelClient;
 
-public class ClientThreadFrom extends Thread {
+public class SlaveClientNode extends Thread {
 
 	private Socket socket = null;
 	private BufferedReader in = null;
@@ -35,9 +36,9 @@ public class ClientThreadFrom extends Thread {
 	private ModelClient m;
 //	private BlockingQueue<String> commandsQueue;
 	private String strLine;
-	private ClientThreadTo clientTo;
+	private SlaveServerNode clientTo;
 
-	public ClientThreadFrom(InetAddress _serverAddress, int _port, Logger _log, String _clientName, ModelClient _m) {
+	public SlaveClientNode(InetAddress _serverAddress, int _port, Logger _log, String _clientName, ModelClient _m) {
 //		commandsQueue=new LinkedBlockingQueue<>();
 		serverAddress = _serverAddress;
 		port = _port;
@@ -60,7 +61,7 @@ public class ClientThreadFrom extends Thread {
 				try {
 					socket = new Socket(serverAddress, port);
 					connectedToServer = true;
-					clientTo=new ClientThreadTo(socket.getInetAddress(),1051,log,"",m);
+					clientTo=new SlaveServerNode(socket.getInetAddress(),1051,log,"",m);
 					clientTo.start();
 				} catch (IOException e) {
 					//log.debug("Connect failed, waiting and trying again...");
