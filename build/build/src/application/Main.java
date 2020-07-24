@@ -25,6 +25,7 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		model = new ModelClient();
+		System.out.println("started");
 		launch(args);
 	}
 }

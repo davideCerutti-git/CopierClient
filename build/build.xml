@@ -88,12 +88,12 @@
 		<mkdir dir="project" />
 		<copy todir="project">
 			<fileset dir="C:\Users\d.cerutti.KEY\Documents\Eclipse\eclipse-workspace\CopierClient">
-				<include name="properties/**" />
+				<include name="src/**" />
 			</fileset>
 		</copy>
 		<copy todir="project">
 			<fileset dir="C:\Users\d.cerutti.KEY\Documents\Eclipse\eclipse-workspace\CopierClient">
-				<include name="src/**" />
+				<include name="properties/**" />
 			</fileset>
 		</copy>
 	
