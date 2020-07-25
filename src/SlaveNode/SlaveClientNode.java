@@ -123,4 +123,14 @@ public class SlaveClientNode extends Thread {
 
 	}
 
+	public SlaveServerNode getClientTo() {
+		return clientTo;
+	}
+
+	public void setClientTo(SlaveServerNode clientTo) {
+		this.clientTo = clientTo;
+	}
+	
+	
+
 }

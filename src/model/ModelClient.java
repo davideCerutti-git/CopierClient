@@ -27,7 +27,7 @@ public class ModelClient {
 		readSettings();
 		this.slaveClientNode = new SlaveClientNode(serverAddress, serverPort, clientServerPort, logger, clientName, this);
 		this.commandRegister= new CommandRegister();
-		this.commandRegister.register("get name", new GetComputerNameCommand());
+		this.commandRegister.register("get name", new GetComputerNameCommand(this));
 		this.slaveClientNode.start();
 		this.ftpServer=new LocalFtpServer(logger);
 		this.ftpServer.startServer();
@@ -63,6 +63,14 @@ public class ModelClient {
 	public void close() {
 		slaveClientNode.close();
 		
+	}
+
+	public SlaveClientNode getSlaveClientNode() {
+		return slaveClientNode;
+	}
+
+	public void setSlaveClientNode(SlaveClientNode slaveClientNode) {
+		this.slaveClientNode = slaveClientNode;
 	}
 	
 }

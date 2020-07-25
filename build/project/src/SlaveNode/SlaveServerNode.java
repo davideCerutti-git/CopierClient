@@ -99,4 +99,9 @@ public class SlaveServerNode extends Thread {
 		return commandsQueue;
 	}
 
+	public void close() {
+		this.runningServerThread=false;
+		
+	}
+
 }
