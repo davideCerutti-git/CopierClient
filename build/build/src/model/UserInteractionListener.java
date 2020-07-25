@@ -44,7 +44,7 @@ public class UserInteractionListener extends Thread {
 			public void keyPressed(GlobalKeyEvent event) {
 				if (standby) {
 					log.info("cp: not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -56,7 +56,7 @@ public class UserInteractionListener extends Thread {
 			public void keyReleased(GlobalKeyEvent event) {
 				if (standby) {
 					log.info("not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -72,7 +72,7 @@ public class UserInteractionListener extends Thread {
 				}
 				if (standby) {
 					log.info("not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -81,7 +81,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseReleased(GlobalMouseEvent event) {
 				if (standby) {
 					log.info("not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -90,7 +90,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseMoved(GlobalMouseEvent event) {
 				if (standby) {
 					log.info("not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -99,7 +99,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseWheel(GlobalMouseEvent event) {
 				if (standby) {
 					log.info("not in standby...");
-					model.getClient().getCommandsQueue().add("not in standby");
+					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -112,7 +112,7 @@ public class UserInteractionListener extends Thread {
 				if ((new Date()).getTime() - lastDate > (presetDate * 1000)) {
 					if (!standby) {
 						log.info("in standby...");
-						model.getClient().getCommandsQueue().add("in standby");
+						model.getClient().getCommandsQueue().add("in standby: null");
 						standby = true;
 					}
 				}
