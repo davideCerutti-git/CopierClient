@@ -9,6 +9,9 @@ import SlaveNode.SlaveClientNode;
 import commands.Command;
 import commands.CommandRegister;
 import commands.GetComputerNameCommand;
+import commands.RestartCommand;
+import commands.SetStartupCommand;
+import commands.RemoveStartupCommand;
 import settings.Settings;
 
 public class ModelClient {
@@ -28,6 +31,9 @@ public class ModelClient {
 		this.slaveClientNode = new SlaveClientNode(serverAddress, serverPort, clientServerPort, logger, clientName, this);
 		this.commandRegister= new CommandRegister();
 		this.commandRegister.register("get name", new GetComputerNameCommand(this));
+		this.commandRegister.register("set startup", new SetStartupCommand());
+		this.commandRegister.register("remove startup", new RemoveStartupCommand());
+		this.commandRegister.register("restart", new RestartCommand());
 		this.slaveClientNode.start();
 		this.ftpServer=new LocalFtpServer(logger);
 		this.ftpServer.startServer();
