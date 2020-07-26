@@ -26,7 +26,7 @@ public class SlaveServerNode extends Thread {
 	private OutputStreamWriter osw;
 	private BufferedWriter bw;
 	private String userInput;
-	private Logger log;
+	private Logger logger;
 	private boolean stopThread;
 	private String clientName;
 	private ModelClient m;
@@ -40,16 +40,15 @@ public class SlaveServerNode extends Thread {
 		
 		serverAddress = _serverAddress;
 		port = _port;
-		log = _log;
+		logger = _log;
 		clientName = _clientName;
 		m = _m;
 		this.commandsQueue = new LinkedBlockingQueue<>();
 		try {
 			serverSocket = new ServerSocket(port);
-			log.debug("created server on client, port: "+port);
+			logger.debug("created server on client, port: "+port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 	}
@@ -57,18 +56,17 @@ public class SlaveServerNode extends Thread {
 	@Override
 	public void run() {
 		try {
-			log.debug("accepting connection");
+			logger.debug("accepting connection");
 			socket = serverSocket.accept();
-			log.debug("connection ok");
+			logger.debug("connection ok");
 		} catch (IOException e) {
-			log.error(e);
+			logger.error(e);
 		}
 		try {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 		
 		try {
@@ -79,15 +77,15 @@ public class SlaveServerNode extends Thread {
 				if (outLine != null) {
 					out.write(outLine+"\n");
 					out.flush();
-					log.debug("C: " + outLine);
+					logger.debug("C: " + outLine);
 					outLine = null;
 					// Read response from Client
 					//log.debug("waiting response");
-					log.debug("R: "+in.readLine());
+					logger.debug("R: "+in.readLine());
 				}
 			}
 		} catch (IOException e) {
-			log.error(e);
+			logger.error(e);
 		}
 	}
 

@@ -12,7 +12,7 @@ public class RestartCommand extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String args) {
+	public String execute(String args) { //TODO comando corretto?
 		String CMD="shutdown /r";
 		try {
 			Runtime.getRuntime().exec(CMD);

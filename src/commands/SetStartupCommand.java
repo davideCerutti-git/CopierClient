@@ -12,7 +12,7 @@ public class SetStartupCommand extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String args) {
+	public String execute(String args) { //TODO non funziona
 		String[] CMD={"copy", "%userprofile%/Downloads/CopierClient", "%userprofile%/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"};
 		try {
 			Runtime.getRuntime().exec(CMD);

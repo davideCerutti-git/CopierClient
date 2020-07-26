@@ -20,7 +20,7 @@ public class GetComputerNameCommand extends AbstractCommand {
 			result=InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
 			model.getLogger().error(e);
-			return e.getMessage();
+			return e.getMessage();  //TODO rivedere stringa di ritorno
 		}
 		model.getSlaveClientNode().getCommandsQueue().add("set name: " +result);
 		

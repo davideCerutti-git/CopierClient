@@ -12,7 +12,7 @@ public class RemoveStartupCommand extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String args) {
+	public String execute(String args) { //TODO non funziona
 		String[] CMD={"del", "%userprofile%/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/CopierClient"};
 		try {
 			Runtime.getRuntime().exec(CMD);
