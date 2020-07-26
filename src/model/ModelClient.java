@@ -2,16 +2,13 @@ package model;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import org.apache.log4j.Logger;
-
 import SlaveNode.SlaveClientNode;
-import commands.Command;
-import commands.CommandRegister;
+import command.CommandRegister;
 import commands.GetComputerNameCommand;
+import commands.RemoveStartupCommand;
 import commands.RestartCommand;
 import commands.SetStartupCommand;
-import commands.RemoveStartupCommand;
 import settings.Settings;
 
 public class ModelClient {
@@ -31,9 +28,9 @@ public class ModelClient {
 		this.slaveClientNode = new SlaveClientNode(serverAddress, serverPort, clientServerPort, logger, clientName, this);
 		this.commandRegister= new CommandRegister();
 		this.commandRegister.register("get name", new GetComputerNameCommand(this));
-		this.commandRegister.register("set startup", new SetStartupCommand());
-		this.commandRegister.register("remove startup", new RemoveStartupCommand());
-		this.commandRegister.register("restart", new RestartCommand());
+		this.commandRegister.register("set startup", new SetStartupCommand(this));
+		this.commandRegister.register("remove startup", new RemoveStartupCommand(this));
+		this.commandRegister.register("restart", new RestartCommand(this));
 		this.slaveClientNode.start();
 		this.ftpServer=new LocalFtpServer(logger);
 		this.ftpServer.startServer();
@@ -77,6 +74,10 @@ public class ModelClient {
 
 	public void setSlaveClientNode(SlaveClientNode slaveClientNode) {
 		this.slaveClientNode = slaveClientNode;
+	}
+
+	public Logger getLogger() {
+		return this.logger;
 	}
 	
 }

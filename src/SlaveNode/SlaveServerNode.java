@@ -9,13 +9,9 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.log4j.Logger;
-
-import commands.Command;
 import model.ModelClient;
 
 public class SlaveServerNode extends Thread {
@@ -83,11 +79,11 @@ public class SlaveServerNode extends Thread {
 				if (outLine != null) {
 					out.write(outLine+"\n");
 					out.flush();
-					log.debug("printed: " + outLine);
+					log.debug("C: " + outLine);
 					outLine = null;
 					// Read response from Client
-					log.debug("waiting response");
-					log.debug("Response: "+in.readLine());
+					//log.debug("waiting response");
+					log.debug("R: "+in.readLine());
 				}
 			}
 		} catch (IOException e) {

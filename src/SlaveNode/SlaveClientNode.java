@@ -11,10 +11,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.log4j.Logger;
 
-import commands.Command;
+import command.AbstractCommand;
 import model.ModelClient;
 
 public class SlaveClientNode extends Thread {
@@ -87,9 +86,9 @@ public class SlaveClientNode extends Thread {
 					logger.debug("waiting commands...");
 					strLine = in.readLine();
 					logger.debug("recived: " + strLine);
-					Command c = m.getCommandRegister().getCommandByName(strLine);
+					AbstractCommand c = m.getCommandRegister().getCommandByName(strLine);
 					logger.debug("responding...");
-					out.write(c.execute() + "\n");
+					out.write(c.execute("") + "\n");
 					out.flush();
 				}
 			} catch (UnknownHostException e) {

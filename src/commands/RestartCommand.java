@@ -2,16 +2,22 @@ package commands;
 
 import java.io.IOException;
 
-public class RestartCommand implements Command {
+import command.AbstractCommand;
+import model.ModelClient;
+
+public class RestartCommand extends AbstractCommand {
+
+	public RestartCommand(ModelClient _model) {
+		super(_model);
+	}
 
 	@Override
-	public String execute() {
+	public String execute(String args) {
 		String CMD="shutdown /r";
 		try {
 			Runtime.getRuntime().exec(CMD);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			model.getLogger().error(e);
 		}
 		return null;
 	}

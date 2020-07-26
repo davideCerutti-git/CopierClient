@@ -2,16 +2,22 @@ package commands;
 
 import java.io.IOException;
 
-public class RemoveStartupCommand implements Command {
+import command.AbstractCommand;
+import model.ModelClient;
+
+public class RemoveStartupCommand extends AbstractCommand {
+
+	public RemoveStartupCommand(ModelClient _model) {
+		super(_model);
+	}
 
 	@Override
-	public String execute() {
+	public String execute(String args) {
 		String[] CMD={"del", "%userprofile%/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/CopierClient"};
 		try {
 			Runtime.getRuntime().exec(CMD);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			(model.getLogger()).error(e);
 		}
 		return null;
 	}
