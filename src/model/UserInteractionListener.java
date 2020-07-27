@@ -12,16 +12,21 @@ import lc.kra.system.mouse.event.GlobalMouseEvent;
 
 public class UserInteractionListener extends Thread {
 
-	private static boolean run1 = true;
+	//Fields:
 	public static boolean standby = false;
+	
+	//Utils:
+	private Logger logger;
 	private static double lastDate = (new Date()).getTime();
 	private static final double presetDate = 5;
-	Logger log;
-	private ModelClient model;
+	private static boolean running = true;
+	
+	//Refs:
+	private ModelClient modelClient;
 
-	public UserInteractionListener(Logger _log, ModelClient _model) {
-		log = _log;
-		model=_model;
+	public UserInteractionListener(Logger _logger, ModelClient _modelClient) {
+		logger = _logger;
+		modelClient=_modelClient;
 	}
 
 	@Override
@@ -29,34 +34,34 @@ public class UserInteractionListener extends Thread {
 		// Keyboard
 		GlobalKeyboardHook keyboardHook = new GlobalKeyboardHook(true); // Use false here to switch to hook instead of
 		// raw input
-		log.info("Global keyboard hook successfully started, press [escape] key to shutdown. Connected keyboards:");
+		logger.info("Global keyboard hook successfully started, press [escape] key to shutdown. Connected keyboards:");
 		for (Entry<Long, String> keyboard : GlobalKeyboardHook.listKeyboards().entrySet()) {
-			log.info(keyboard.getKey() + ": " + keyboard.getValue());
+			logger.info(keyboard.getKey() + ": " + keyboard.getValue());
 		}
 		// Mouse
 		GlobalMouseHook mouseHook = new GlobalMouseHook(); // Add true to the constructor, to switch to raw input mode
-		log.info("Global mouse hook successfully started, press [middle] mouse button to shutdown. Connected mice:");
+		logger.info("Global mouse hook successfully started, press [middle] mouse button to shutdown. Connected mice:");
 		for (Entry<Long, String> mouse : GlobalMouseHook.listMice().entrySet()) {
-			log.info(mouse.getKey() + ": " + mouse.getValue());
+			logger.info(mouse.getKey() + ": " + mouse.getValue());
 		}
 		keyboardHook.addKeyListener(new GlobalKeyAdapter() {
 			@Override
 			public void keyPressed(GlobalKeyEvent event) {
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
 				if (event.getVirtualKeyCode() == GlobalKeyEvent.VK_ESCAPE) {
-					run1 = false;
+					running = false;
 				}
 			}
 			@Override
 			public void keyReleased(GlobalKeyEvent event) {
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -68,11 +73,11 @@ public class UserInteractionListener extends Thread {
 			public void mousePressed(GlobalMouseEvent event) {
 				if ((event.getButtons() & GlobalMouseEvent.BUTTON_LEFT) != GlobalMouseEvent.BUTTON_NO
 						&& (event.getButtons() & GlobalMouseEvent.BUTTON_RIGHT) != GlobalMouseEvent.BUTTON_NO) {
-					log.info("Both mouse buttons are currently pressed!");
+					logger.info("Both mouse buttons are currently pressed!");
 				}
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -81,7 +86,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseReleased(GlobalMouseEvent event) {
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -90,7 +95,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseMoved(GlobalMouseEvent event) {
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -99,7 +104,7 @@ public class UserInteractionListener extends Thread {
 			public void mouseWheel(GlobalMouseEvent event) {
 				if (standby) {
 					//not in standby...
-					model.getClient().getCommandsQueue().add("not in standby: null");
+					modelClient.getCommandsQueue().add("not in standby: null");
 				}
 				standby = false;
 				lastDate = (new Date()).getTime();
@@ -107,18 +112,18 @@ public class UserInteractionListener extends Thread {
 		});
 
 		try {
-			while (run1) {
+			while (running) {
 				Thread.sleep(128);
 				if ((new Date()).getTime() - lastDate > (presetDate * 1000)) {
 					if (!standby) {
 						//in standby...
-						model.getClient().getCommandsQueue().add("in standby: null");
+						modelClient.getCommandsQueue().add("in standby: null");
 						standby = true;
 					}
 				}
 			}
 		} catch (InterruptedException e) {
-			log.error(e);
+			logger.error(e);
 		} finally {
 			keyboardHook.shutdownHook();
 			mouseHook.shutdownHook();

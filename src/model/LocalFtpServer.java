@@ -10,14 +10,13 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.log4j.Logger;
 
-
 public class LocalFtpServer {
 
     private FtpServer server;
-    private Logger log;
+    private Logger logger;
     
-    public LocalFtpServer(Logger _log) {
-    	log=_log;
+    public LocalFtpServer(Logger _logger) {
+    	logger=_logger;
     }
 
     public void startServer() {
@@ -34,7 +33,7 @@ public class LocalFtpServer {
         try {
             server.start();
         } catch (FtpException ex) {
-            log.error(ex);
+            logger.error(ex);
             ex.printStackTrace();
         }
     }
@@ -55,4 +54,5 @@ public class LocalFtpServer {
     public void shutdown() {
         server.stop();
     }
+    
 }

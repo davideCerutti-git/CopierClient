@@ -1,7 +1,6 @@
 package SlaveNode;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -9,41 +8,36 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
-
 import command.AbstractCommand;
 import model.ModelClient;
 
 public class SlaveClientNode extends Thread {
 
+	//Fields:
 	private Socket socket = null;
-	private BufferedReader in = null;
-	private PrintWriter out = null;
+
+	private boolean stopThread;
+	private boolean connectedToServer = false;
 	private InetAddress serverAddress;
 	private int serverPort, clientServerPort;
-	private boolean connectedToServer = false;
-	private InputStreamReader isr;
-	private OutputStreamWriter osw;
-	private BufferedWriter bw;
-	private String userInput;
-	private final Logger logger;
-	private boolean stopThread;
-	private String clientName;
-	private ModelClient m;
-//	private BlockingQueue<String> commandsQueue;
+	
+	//Refs:
+	private ModelClient modelClient;
+	//Utils:
 	private String strLine;
-	private SlaveServerNode clientTo;
+	private final Logger logger;
+	
+	//Owns:
+	private BufferedReader inStream = null;
+	private PrintWriter outStream = null;
 
-	public SlaveClientNode(InetAddress _serverAddress, int _serverPort, int _clientServerPort, Logger _log, String _clientName, ModelClient _m) {
-//		commandsQueue=new LinkedBlockingQueue<>();
+	public SlaveClientNode(InetAddress _serverAddress, int _serverPort, int _clientServerPort, Logger _logger, ModelClient _modelClient) {
 		serverAddress = _serverAddress;
 		serverPort = _serverPort;
 		clientServerPort=_clientServerPort;
-		logger = _log;
-		clientName = _clientName;
-		m = _m;
+		logger = _logger;
+		modelClient = _modelClient;
 	}
 
 	@Override
@@ -52,18 +46,14 @@ public class SlaveClientNode extends Thread {
 		while (!stopThread) {
 			while (!connectedToServer && !stopThread) {
 				socket = null;
-				out = null;
-				in = null;
-				osw = null;
-				bw = null;
-				isr = null;
+				outStream = null;
+				inStream = null;
 				try {
 					socket = new Socket(serverAddress, serverPort);
 					connectedToServer = true;
-					clientTo = new SlaveServerNode(socket.getInetAddress(), clientServerPort, logger, "", m);
-					clientTo.start();
+					modelClient.setSlaveServerNode(new SlaveServerNode(clientServerPort, logger, modelClient));
+					modelClient.getSlaveServerNode().start();
 				} catch (IOException e) {
-					// log.debug("Connect failed, waiting and trying again...");
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException ie) {
@@ -75,8 +65,8 @@ public class SlaveClientNode extends Thread {
 			logger.debug("Client Socket: " + socket);
 			// creation input/output streams from socket
 			try {
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+				inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				outStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -84,15 +74,15 @@ public class SlaveClientNode extends Thread {
 				while (!stopThread) {
 					// Receiver
 					logger.debug("waiting commands...");
-					strLine = in.readLine();
+					strLine = inStream.readLine();
 					logger.debug("recived: " + strLine);
-					AbstractCommand c = m.getCommandRegister().getCommandByName(strLine);
+					AbstractCommand c = modelClient.getCommandRegister().getCommandByName(strLine);
 					logger.debug("responding...");
-					out.write(c.execute("") + "\n");
-					out.flush();
+					outStream.write(c.execute("") + "\n");
+					outStream.flush();
 				}
 			} catch (UnknownHostException e) {
-				System.err.println("Don’t know about host " + serverAddress);
+				logger.error("Don’t know about host " + serverAddress);
 				System.exit(1);
 			} catch (IOException e) {
 				logger.debug("Lost connection to: " + serverAddress);
@@ -101,35 +91,20 @@ public class SlaveClientNode extends Thread {
 		}
 
 		logger.debug("EchoClient: closing...");
-		out.close();
+		outStream.close();
 		try {
-			in.close();
+			inStream.close();
 			socket.close();
 		} catch (IOException e) {
 			logger.error(e);
 		}
 	}
 
-	public BlockingQueue<String> getCommandsQueue() {
-		return clientTo.getCommandsQueue();
-	}
-
 	public void close() {
-		if (clientTo != null)
-			clientTo.close();
+		if (modelClient.getSlaveServerNode() != null)
+			modelClient.getSlaveServerNode().close();
 		this.stopThread = true;
 		this.connectedToServer = false;
-
 	}
-
-	public SlaveServerNode getClientTo() {
-		return clientTo;
-	}
-
-	public void setClientTo(SlaveServerNode clientTo) {
-		this.clientTo = clientTo;
-	}
-	
-	
 
 }

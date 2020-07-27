@@ -12,7 +12,10 @@ import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	static ModelClient model;
+	
+	//Fields:
+	static ModelClient modelClient;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -23,7 +26,7 @@ public class Main extends Application {
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent t) {
-					model.close();
+					modelClient.close();
 					Platform.exit();
 					System.exit(0);
 				}
@@ -35,9 +38,10 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-		model = new ModelClient();
+		modelClient = new ModelClient();
 		System.out.println("started");
 		launch(args);
 	}
+	
 }
 

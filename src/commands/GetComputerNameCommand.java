@@ -2,13 +2,11 @@ package commands;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import command.AbstractCommand;
 import model.ModelClient;
 
 public class GetComputerNameCommand extends AbstractCommand {
 
-	
 	public GetComputerNameCommand(ModelClient _model) {
 		super(_model);
 	}
@@ -22,8 +20,8 @@ public class GetComputerNameCommand extends AbstractCommand {
 			model.getLogger().error(e);
 			return e.getMessage();  //TODO rivedere stringa di ritorno
 		}
-		model.getSlaveClientNode().getCommandsQueue().add("set name: " +result);
-		
+		model.getCommandsQueue().add("set name: " +result);
 		return result;
 	}
+	
 }

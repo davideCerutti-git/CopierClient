@@ -1,7 +1,6 @@
 package commands;
 
 import java.io.IOException;
-
 import command.AbstractCommand;
 import model.ModelClient;
 
